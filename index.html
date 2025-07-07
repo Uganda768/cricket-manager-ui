@@ -1,23 +1,34 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Select Your Team</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-    h1 { text-align: center; }
-    .team-list { display: flex; flex-wrap: wrap; justify-content: center; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    .team-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     .team-card {
       background: white;
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 15px;
       margin: 10px;
-      width: 280px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     }
-    .team-card h3 { margin-top: 0; }
+    .team-card h3 {
+      margin-top: 0;
+    }
     .team-card button {
       background-color: #007bff;
       color: white;
@@ -25,9 +36,23 @@
       padding: 10px;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
+      margin-right: 5px;
     }
     .team-card button:hover {
       background-color: #0056b3;
+    }
+    .player-list {
+      display: none;
+      margin-top: 10px;
+    }
+    .player-list ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    .player-list li {
+      font-size: 0.9em;
+      margin-bottom: 6px;
     }
   </style>
 </head>
@@ -36,9 +61,11 @@
   <div class="team-list" id="teamList"></div>
 
   <script>
+    let teams = [];
+
     async function loadTeams() {
       const response = await fetch("league_teams.json");
-      const teams = await response.json();
+      teams = await response.json();
       const teamList = document.getElementById("teamList");
 
       teams.forEach((team, index) => {
@@ -48,15 +75,44 @@
           <h3>${team.team_name}</h3>
           <p><strong>Home Ground:</strong> ${team.ground}</p>
           <p><strong>Players:</strong> ${team.players.length}</p>
+          <button onclick="togglePlayers(${index})" id="viewBtn-${index}">View Players</button>
+          <div class="player-list" id="players-${index}">
+            <ul>
+              ${team.players
+                .map(
+                  (p) => `<li>
+                    <strong>${p.name}</strong> (${p.role}) —
+                    BatR: ${p.stats.bat_r}, BatL: ${p.stats.bat_l},
+                    BowlR: ${p.stats.bowl_r}, BowlL: ${p.stats.bowl_l},
+                    Field: ${p.stats.ground_fielding}, Catch: ${p.stats.catching},
+                    Speed: ${p.stats.speed}, Agg: ${p.stats.aggression}, Hand: ${p.hand}
+                  </li>`
+                )
+                .join("")}
+            </ul>
+          </div>
           <button onclick="selectTeam(${index})">Select This Team</button>
         `;
         teamList.appendChild(div);
       });
     }
 
+    function togglePlayers(index) {
+      const playerDiv = document.getElementById(`players-${index}`);
+      const viewBtn = document.getElementById(`viewBtn-${index}`);
+      if (playerDiv.style.display === "none" || playerDiv.style.display === "") {
+        playerDiv.style.display = "block";
+        viewBtn.textContent = "Hide Players";
+      } else {
+        playerDiv.style.display = "none";
+        viewBtn.textContent = "View Players";
+      }
+    }
+
     function selectTeam(index) {
       localStorage.setItem("selectedTeamIndex", index);
-      alert("You have selected team #" + (index + 1));
+      localStorage.setItem("selectedTeam", JSON.stringify(teams[index]));
+      window.location.href = "my_team.html";
     }
 
     loadTeams();
