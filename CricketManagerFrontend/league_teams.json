@@ -1,0 +1,38 @@
+[
+  {
+    "team_name": "Lions",
+    "ground": "Stadium A",
+    "players": [
+      {
+        "name": "Player A1",
+        "role": "Batsman",
+        "stats": {
+          "bat_r": 70,
+          "bat_l": 65,
+          "bowl_r": 30,
+          "bowl_l": 25,
+          "ground_fielding": 80,
+          "catching": 75,
+          "speed": 60,
+          "aggression": 50
+        },
+        "hand": "Right"
+      },
+      {
+        "name": "Player A2",
+        "role": "Bowler",
+        "stats": {
+          "bat_r": 40,
+          "bat_l": 45,
+          "bowl_r": 85,
+          "bowl_l": 80,
+          "ground_fielding": 70,
+          "catching": 60,
+          "speed": 75,
+          "aggression": 60
+        },
+        "hand": "Left"
+      }
+    ]
+  }
+]

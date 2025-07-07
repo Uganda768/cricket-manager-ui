@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Team</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
+    h1 { text-align: center; }
+    .team-info { text-align: center; margin-bottom: 20px; }
+    .player-list ul { list-style: none; padding: 0; }
+    .player-list li {
+      background: #fff;
+      border: 1px solid #ccc;
+      margin: 5px auto;
+      padding: 10px;
+      width: 90%;
+      border-radius: 5px;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>My Team</h1>
+  <div class="team-info" id="teamInfo"></div>
+  <div class="player-list" id="playerList"></div>
+
+  <script>
+    const team = JSON.parse(localStorage.getItem("selectedTeam"));
+    if (team) {
+      document.getElementById("teamInfo").innerHTML = \`
+        <h2>\${team.team_name}</h2>
+        <p><strong>Home Ground:</strong> \${team.ground}</p>
+      \`;
+
+      const listHTML = team.players.map(p => \`
+        <li><strong>\${p.name}</strong> (\${p.role}) —
+        BatR: \${p.stats.bat_r}, BatL: \${p.stats.bat_l},
+        BowlR: \${p.stats.bowl_r}, BowlL: \${p.stats.bowl_l},
+        Field: \${p.stats.ground_fielding}, Catch: \${p.stats.catching},
+        Speed: \${p.stats.speed}, Agg: \${p.stats.aggression}, Hand: \${p.hand}</li>
+      \`).join("");
+
+      document.getElementById("playerList").innerHTML = "<ul>" + listHTML + "</ul>";
+    } else {
+      document.getElementById("teamInfo").innerHTML = "<p>No team selected.</p>";
+    }
+  </script>
+</body>
+</html>

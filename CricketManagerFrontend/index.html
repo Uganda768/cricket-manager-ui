@@ -71,35 +71,32 @@
       teams.forEach((team, index) => {
         const div = document.createElement("div");
         div.className = "team-card";
-        div.innerHTML = `
-          <h3>${team.team_name}</h3>
-          <p><strong>Home Ground:</strong> ${team.ground}</p>
-          <p><strong>Players:</strong> ${team.players.length}</p>
-          <button onclick="togglePlayers(${index})" id="viewBtn-${index}">View Players</button>
-          <div class="player-list" id="players-${index}">
+        div.innerHTML = \`
+          <h3>\${team.team_name}</h3>
+          <p><strong>Home Ground:</strong> \${team.ground}</p>
+          <button onclick="togglePlayers(\${index})" id="viewBtn-\${index}">View Players</button>
+          <div class="player-list" id="players-\${index}">
             <ul>
-              ${team.players
-                .map(
-                  (p) => `<li>
-                    <strong>${p.name}</strong> (${p.role}) —
-                    BatR: ${p.stats.bat_r}, BatL: ${p.stats.bat_l},
-                    BowlR: ${p.stats.bowl_r}, BowlL: ${p.stats.bowl_l},
-                    Field: ${p.stats.ground_fielding}, Catch: ${p.stats.catching},
-                    Speed: ${p.stats.speed}, Agg: ${p.stats.aggression}, Hand: ${p.hand}
-                  </li>`
-                )
-                .join("")}
+              \${team.players.map(p => \`
+                <li>
+                  <strong>\${p.name}</strong> (\${p.role}) —
+                  BatR: \${p.stats.bat_r}, BatL: \${p.stats.bat_l},
+                  BowlR: \${p.stats.bowl_r}, BowlL: \${p.stats.bowl_l},
+                  Field: \${p.stats.ground_fielding}, Catch: \${p.stats.catching},
+                  Speed: \${p.stats.speed}, Agg: \${p.stats.aggression}, Hand: \${p.hand}
+                </li>\`).join("")}
             </ul>
           </div>
-          <button onclick="selectTeam(${index})">Select This Team</button>
-        `;
+          <button onclick="selectTeam(\${index})">Select This Team</button>
+        \`;
         teamList.appendChild(div);
+        document.getElementById(\`players-\${index}\`).style.display = "none";
       });
     }
 
     function togglePlayers(index) {
-      const playerDiv = document.getElementById(`players-${index}`);
-      const viewBtn = document.getElementById(`viewBtn-${index}`);
+      const playerDiv = document.getElementById(\`players-\${index}\`);
+      const viewBtn = document.getElementById(\`viewBtn-\${index}\`);
       if (playerDiv.style.display === "none" || playerDiv.style.display === "") {
         playerDiv.style.display = "block";
         viewBtn.textContent = "Hide Players";
