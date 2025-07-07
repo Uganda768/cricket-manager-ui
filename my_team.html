@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Team</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
+    h1, h2 { text-align: center; }
+    .player-list { display: flex; flex-wrap: wrap; justify-content: center; }
+    .player-card {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+      width: 240px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+    .player-card h3 {
+      margin-top: 0;
+      font-size: 16px;
+    }
+    .role-badge {
+      background: #007bff;
+      color: white;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+    .back-link {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .back-link a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="back-link"><a href="index.html">&larr; Back to Team Selection</a></div>
+  <h1>My Selected Team</h1>
+  <h2 id="teamName"></h2>
+  <p style="text-align:center;"><strong>Home Ground:</strong> <span id="groundType"></span></p>
+  <div class="player-list" id="playerList"></div>
+
+  <script>
+    async function loadMyTeam() {
+      const teamIndex = localStorage.getItem("selectedTeamIndex");
+      if (teamIndex === null) {
+        alert("No team selected! Please go back and choose a team.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const response = await fetch("league_teams.json");
+      const teams = await response.json();
+      const team = teams[parseInt(teamIndex)];
+
+      document.getElementById("teamName").textContent = team.team_name;
+      document.getElementById("groundType").textContent = team.ground;
+
+      const playerList = document.getElementById("playerList");
+
+      team.players.forEach(player => {
+        const div = document.createElement("div");
+        div.className = "player-card";
+        div.innerHTML = `
+          <h3>${player.name} <span class="role-badge">${player.role}</span></h3>
+          <p><strong>Handedness:</strong> ${player.handedness}</p>
+          <p><strong>Bat R:</strong> ${player.bat_r} | <strong>Bat L:</strong> ${player.bat_l}</p>
+          <p><strong>Bowl R:</strong> ${player.bowl_r} | <strong>Bowl L:</strong> ${player.bowl_l}</p>
+          <p><strong>Fielding:</strong> ${player.fielding}</p>
+          <p><strong>Catching:</strong> ${player.catching}</p>
+          <p><strong>Speed:</strong> ${player.speed}</p>
+          <p><strong>Aggression:</strong> ${player.aggression}</p>
+        `;
+        playerList.appendChild(div);
+      });
+    }
+
+    loadMyTeam();
+  </script>
+</body>
+</html>
